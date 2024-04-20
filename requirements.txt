@@ -1,0 +1,20 @@
+
+
+
+Anaconda install (Python 3.11)
+conda install inputs
+conda install pyserial
+conda install keyboard
+
+
+Generic Python Install (Python 3.11)
+python -m pip install inputs
+python -m pip install pyserial
+python -m pip install keyboard
+
+
+
+
+
+
+
