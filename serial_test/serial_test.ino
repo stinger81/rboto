@@ -11,7 +11,7 @@ int left_track_speed;
 int _left_dir;
 int _right_dir;
 
-int gun_move = 0;
+int cannon_move = 0;
 int up_down_pos = 0;
 int arm_val = 0;
 int fire_val = 0;
@@ -21,12 +21,12 @@ String temp;
 // direction Correction factors
 const int _dir_cor_right_arm = 1;
 const int _dir_cor_left_arm = 1;
-const int _dir_cor_gun = 1;
+const int _dir_cor_cannon = 1;
 
 // silinoid 
 
-const int arm_pin = 0;
-const int fire_pin = 1;
+const int arm_pin = 8;
+const int fire_pin = 9;
 
 // DC MOTORS STEUP
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -38,8 +38,8 @@ const int left_arm_dir = 7;
 const int left_arm_step = 6;
 const int right_arm_dir = 4;
 const int right_arm_step = 5;
-const int gun_dir = 2;
-const int gun_step = 3;
+const int cannon_dir = 2;
+const int cannon_step = 3;
 
 const int STEPS = 200;
 const int MY_RPM = 200;
@@ -47,7 +47,7 @@ const int MY_MICROSTEP = 1;
 
 A4988 leftArmStepper(STEPS, left_arm_dir, left_arm_step);
 A4988 rightArmStepper(STEPS, right_arm_dir, right_arm_step);
-A4988 gunStepper(STEPS, gun_dir, gun_step);
+A4988 cannonStepper(STEPS, cannon_dir, cannon_step);
 
 // DATA INTERFACE
 
@@ -69,7 +69,7 @@ void setup() {
   AFMS.begin();
   leftArmStepper.begin(MY_RPM, MY_MICROSTEP);
   rightArmStepper.begin(MY_RPM, MY_MICROSTEP);
-  gunStepper.begin(MY_RPM, MY_MICROSTEP);
+  cannonStepper.begin(MY_RPM, MY_MICROSTEP);
   pinMode(arm_pin, OUTPUT);
   pinMode(fire_pin, OUTPUT);
 
@@ -77,22 +77,22 @@ void setup() {
 
 void loop() {
   read_incoming();
-  gunStepper.move(gun_move);
+  cannonStepper.move(cannon_move);
   drive();
   updown();
   arm();
   fire();
 
-  // gunStepper.move(100);
+  // cannonStepper.move(100);
 
   // delay(1000);
 
-  // gunStepper.move(-100);
+  // cannonStepper.move(-100);
   // delay(1000);
 
   
 
-  // gunStepper.
+  // cannonStepper.
 
 
 
@@ -103,7 +103,7 @@ void loop() {
 void read_incoming(){
   // read incoming in the order they are recived
   if(Serial.available() > 0){
-    buf = Serial.readStringUntil('\n');
+    buf = Serial.readStrincannontil('\n');
     if (buf[0] == 'D'){ // Check if incoming packet is data
       decode_data_packet();
       // send_state();
@@ -170,9 +170,10 @@ void decode_data_packet(){
   left_track_speed = buf.substring(2,6).toInt() - 255; // get substring between 2 and up to but not icnluding 6 
   right_track_speed = buf.substring(7,11).toInt() - 255;
   up_down_pos = buf.substring(12,16).toInt() - 255;
-  gun_move = buf.substring(17,21).toInt() - 255;
+  cannon_move = buf.substring(17,21).toInt() - 255;
   arm_val = buf.substring(22, 26).toInt();
   fire_val = buf.substring(27,31).toInt();
+  stepper_state = buf.substring(32,36).toInt();
 
 }
 
@@ -190,7 +191,7 @@ void send_state(){
   Serial.print(",");
   Serial.print(up_down_pos);
   Serial.print(",");
-  Serial.print(gun_move);
+  Serial.print(cannon_move);
   Serial.print(",");
   Serial.print(arm_val);
   Serial.print(",");

@@ -116,7 +116,7 @@ class XboxController(object):
     def _renormalize_joy(self, values):
         """
         Renormalize the joystick values to be between -1 and 1
-        if values are less than the threshold 0 is returned.
+        if values are less than the threshold 0 is returned.2
         values greater than the threshold are renormalized to be between 0 and 1
         if threshold is 0.5 and 0.6 is the value, the new value will be 0.2
         :param values:

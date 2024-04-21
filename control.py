@@ -29,7 +29,7 @@ CONTROL_MODE = "xbox"  # xbox or keyboard
 ENABLE_SERIAL = True
 UPDATE_FREQUENCY = 10000  # Hz
 COMM_PORT = "COM13"
-GUN_STEPS_PER_PACKET = 10
+CANNON_STEPS_PER_PACKET = 5
 UPDOWN_STEPS_PER_PACKET = 30
 
 
@@ -49,7 +49,7 @@ class control:
 
         self.right_tank_rate = 0
         self.left_tank_rate = 0
-        self.gun_move = 0
+        self.cannon_move = 0
         self.arm_val = 0
         self.fire_val = 0
 
@@ -71,14 +71,14 @@ class control:
                     self.drive_mode = "tank"
                     print("Tank Mode")
                 self.mode_set = time.time()
-        elif self.control.B == 1:  # stop
-            self.stop()
+        elif self.control.B == 1:  # stop steppers
+            pass
         elif self.control.RightBumper == 1 and self.control.LeftBumper == 1:
             self.gun_move = 0
         elif self.control.RightBumper == 1:
-            self.gun_move = GUN_STEPS_PER_PACKET
+            self.gun_move = CANNON_STEPS_PER_PACKET
         elif self.control.LeftBumper == 1:
-            self.gun_move = -GUN_STEPS_PER_PACKET
+            self.gun_move = -CANNON_STEPS_PER_PACKET
         elif self.control.LeftTrigger > 0.75:
             self.arm()
         elif self.control.RightTrigger > 0.75:
